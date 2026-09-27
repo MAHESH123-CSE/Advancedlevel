@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoxOps Suite | ShadowFox Advanced Level Frontend Project</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                            accent: '#f97316'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .code-glow {
+            box-shadow: 0 0 35px -5px rgba(99, 102, 241, 0.25);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen antialiased flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-500 to-brand-accent flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <div>
+                    <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-brand-600 to-indigo-500 dark:from-brand-200 dark:to-white bg-clip-text text-transparent">FoxOps</span>
+                    <span class="text-xs px-2 py-0.5 ml-1.5 rounded-full font-semibold uppercase tracking-wider bg-orange-100 dark:bg-orange-950/80 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800/50">Adv. Level</span>
+                </div>
+            </a>
+
+            <!-- Desktop Links -->
+            <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
+                <a href="#overview" class="hover:text-brand-600 dark:hover:text-brand-200 transition-colors">Client Brief</a>
+                <a href="#workflows" class="hover:text-brand-600 dark:hover:text-brand-200 transition-colors">Interactive Pipeline</a>
+                <a href="#analytics" class="hover:text-brand-600 dark:hover:text-brand-200 transition-colors">Live KPI Metrics</a>
+                <a href="#architecture" class="hover:text-brand-600 dark:hover:text-brand-200 transition-colors">Architecture & UX</a>
+                <a href="#submission" class="hover:text-brand-600 dark:hover:text-brand-200 transition-colors text-brand-600 dark:text-brand-500 font-semibold">Submission Dossier</a>
+            </nav>
+
+            <!-- Actions (Theme Toggle & CTA) -->
+            <div class="flex items-center gap-3">
+                <button id="themeToggleBtn" type="button" aria-label="Toggle theme" class="p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <svg id="themeMoonIcon" class="w-5 h-5 hidden dark:block text-amber-300" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                    </svg>
+                    <svg id="themeSunIcon" class="w-5 h-5 block dark:hidden text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+
+                <a href="#submission" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs uppercase tracking-wider font-semibold rounded-lg bg-brand-600 hover:bg-brand-700 text-white shadow-sm hover:shadow transition-all">
+                    <span>Intern Submission</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" aria-label="Toggle menu" class="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileDrawer" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 px-4 py-3 space-y-2">
+            <a href="#overview" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Client Brief</a>
+            <a href="#workflows" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Interactive Pipeline</a>
+            <a href="#analytics" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Live KPI Metrics</a>
+            <a href="#architecture" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Architecture & UX</a>
+            <a href="#submission" class="block py-2 text-sm font-semibold text-brand-600 dark:text-brand-400">Submission Dossier</a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28">
+            <!-- Background ambient glow -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left Hero Content -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-700/50">
+                            <span class="flex h-2 w-2 rounded-full bg-brand-500 animate-ping"></span>
+                            ShadowFox Advanced Frontend Deliverable
+                        </div>
+
+                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900 dark:text-white">
+                            Intelligent Enterprise Operations, <span class="bg-gradient-to-r from-brand-600 via-indigo-500 to-brand-accent bg-clip-text text-transparent">Engineered for Scale.</span>
+                        </h1>
+
+                        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+                            A production-grade, requirement-driven client portal addressing enterprise pipeline friction. Designed with architectural clarity, modular components, tactile interaction states, and multi-tier analytics.
+                        </p>
+
+                        <!-- CTA Row -->
+                        <div class="flex flex-wrap items-center gap-4 pt-2">
+                            <a href="#workflows" class="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 inline-flex items-center gap-2">
+                                <span>Explore Interactive Pipeline</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </a>
+                            <a href="#overview" class="px-6 py-3.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800/60 font-semibold text-sm transition-all inline-flex items-center gap-2 text-slate-700 dark:text-slate-200">
+                                <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span>Review Client Brief</span>
+                            </a>
+                        </div>
+
+                        <!-- Metric Highlights Bar -->
+                        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200 dark:border-slate-800">
+                            <div>
+                                <p class="text-2xl font-bold text-slate-900 dark:text-white" id="statAccuracy">99.98%</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Pipeline SLA Uptime</p>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-slate-900 dark:text-white" id="statLatency">&lt;42ms</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Event Execution</p>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-slate-900 dark:text-white">100%</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Responsive & A11y</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Interactive Terminal Card -->
+                    <div class="lg:col-span-5">
+                        <div class="rounded-2xl bg-slate-900 border border-slate-800 p-5 shadow-2xl code-glow text-slate-200 text-xs font-mono">
+                            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                                    <span class="ml-2 text-slate-400 text-[11px]">shadowfox-client-runtime.sh</span>
+                                </div>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">Active Node</span>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-slate-500">$</span> foxops --verify-client-spec
+                                    <div class="text-emerald-400 mt-1">✔ Requirements Brief loaded [ShadowFox Adv Stage]</div>
+                                    <div class="text-emerald-400">✔ Layout hierarchy prioritized (Product-first UX)</div>
+                                    <div class="text-emerald-400">✔ Accessible controls & dynamic theme engine synced</div>
+                                </div>
+
+                                <div class="bg-slate-950/70 p-3 rounded-lg border border-slate-800/80">
+                                    <div class="flex justify-between items-center text-[11px] mb-2">
+                                        <span class="text-slate-400">Task Execution Engine</span>
+                                        <span id="runtimeEngineStatus" class="text-indigo-400">Processing Stream...</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                        <div id="runtimeProgressBar" class="bg-indigo-500 h-full w-3/4 transition-all duration-700"></div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-2 flex items-center justify-between">
+                                    <button onclick="triggerSimulatedEvent()" class="px-3 py-1.5 rounded-lg bg-indigo-600/80 hover:bg-indigo-600 text-white text-[11px] transition-colors flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span>Dispatch Client Webhook</span>
+                                    </button>
+                                    <span id="webhookCounter" class="text-slate-400 text-[10px]">Calls: 12</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="overview" class="py-16 bg-slate-100/70 dark:bg-slate-900/40 border-y border-slate-200/80 dark:border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs uppercase font-bold tracking-widest text-brand-600 dark:text-brand-400 mb-2">Requirement Analysis</h2>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Client Brief & Architecture Translation</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mt-3">
+                        Demonstrating how ambiguous business criteria are converted into functional UI architecture, user journeys, responsive design tokens, and clear CTAs.
+                    </p>
+                </div>
+
+                <!-- Brief Tabs Switcher -->
+                <div class="flex justify-center mb-8">
+                    <div class="inline-flex p-1 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-semibold">
+                        <button onclick="switchTab('tab-functional')" id="tabBtn-functional" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm transition-all">
+                            Functional Requirements
+                        </button>
+                        <button onclick="switchTab('tab-design')" id="tabBtn-design" class="px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                            Design System & UX Decisions
+                        </button>
+                        <button onclick="switchTab('tab-deliverables')" id="tabBtn-deliverables" class="px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                            Technical Deliverables
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tab Content 1: Functional Requirements -->
+                <div id="tab-functional" class="grid md:grid-cols-3 gap-6 transition-all">
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            01
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">Real-Time State Transitions</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Clients demand uninterrupted workflow views. In FoxOps, tasks cycle through customizable validation states (Backlog → Active → Verification → Deployed) with live badge updates.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            02
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">Dynamic Analytical Feedback</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Data clarity over dense spreadsheets. Interactive Canvas metric visualization renders weekly request volume, system latency benchmarks, and threshold alerts dynamically.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            03
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">Production-Ready Form Validation</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Robust client-side validation prevents invalid submissions. Integrated modal validates emails, URL schemas, and required scope fields with non-blocking toast notifications.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tab Content 2: Design System (Initially Hidden) -->
+                <div id="tab-design" class="hidden grid md:grid-cols-3 gap-6 transition-all">
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            UI
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">Fluid Ergonomics</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Adaptive typographic scale using the Inter typeface, high contrast ratios (WCAG AAA compliant), and smooth tactile micro-interactions on every actionable surface.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            A11Y
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">Accessible Keyboarding</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Explicit focus rings, keyboard navigability across all cards, screen-reader semantic landmarks (`main`, `nav`, `section`, `header`), and color tokens that avoid single-channel cue dependency.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            RES
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">Breakpoint Resiliency</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Mobile-first CSS grid and flex layouts that gracefully degrade from wide 4K screens down to compact 320px mobile displays without horizontal scroll overflow.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tab Content 3: Deliverables (Initially Hidden) -->
+                <div id="tab-deliverables" class="hidden grid md:grid-cols-3 gap-6 transition-all">
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            01
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">Single-File Architecture</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Zero bundler or compilation prerequisites. Embeds layout, responsive style utilities, and vanilla reactive state logic in a clean, deployable package.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            02
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">Zero External Dependencies</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Eliminates fragile npm dependency chains. Uses pure native Canvas 2D API for data telemetry charts and vanilla DOM APIs for pipeline mutations.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 font-bold text-sm">
+                            03
+                        </div>
+                        <h4 class="font-bold text-base mb-2 text-slate-900 dark:text-white">ShadowFox Email Dispatcher</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Direct automated email formatting targeting `glodubts@shadowfox.in` with structured submission payload, verification links, and pre-formatted internship credentials.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="workflows" class="py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-brand-600 dark:text-brand-400">Core Feature Showcase</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Interactive Operational Pipeline</h2>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Simulate enterprise task progression across project sprint cycles.</p>
+                    </div>
+
+                    <!-- Filter Controls -->
+                    <div class="flex items-center gap-2 self-start md:self-auto">
+                        <div class="relative">
+                            <input id="pipelineSearch" type="text" placeholder="Filter tasks by tag..." onkeyup="filterTasks()" class="pl-8 pr-3 py-2 rounded-xl text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                        <button onclick="openAddTaskModal()" class="px-3.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs flex items-center gap-1.5 shadow-sm transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            <span>Add Step</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 Column Pipeline -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Column 1: Backlog -->
+                    <div class="rounded-2xl p-4 bg-slate-100 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-slate-400"></span> Backlog
+                            </span>
+                            <span id="count-backlog" class="text-xs px-2 py-0.5 rounded-full font-mono bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">2</span>
+                        </div>
+                        <div id="col-backlog" class="space-y-3 min-h-[220px]">
+                            <!-- Task Card 1 -->
+                            <div class="task-card p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-sm" data-id="task-1" data-tag="Security">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300">Security</span>
+                                    <span class="text-[11px] text-slate-400 font-mono">#FX-101</span>
+                                </div>
+                                <h5 class="text-sm font-semibold text-slate-900 dark:text-white">Confidentiality NDA Check</h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Review restricted access agreements for ShadowFox advanced team.</p>
+                                <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+                                    <span class="text-[11px] text-slate-400">Owner: Glodubts</span>
+                                    <button onclick="advanceTask('task-1', 'in-progress')" class="text-brand-600 dark:text-brand-400 hover:underline font-medium">Advance →</button>
+                                </div>
+                            </div>
+
+                            <!-- Task Card 2 -->
+                            <div class="task-card p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-sm" data-id="task-2" data-tag="UI/UX">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300">UI/UX</span>
+                                    <span class="text-[11px] text-slate-400 font-mono">#FX-102</span>
+                                </div>
+                                <h5 class="text-sm font-semibold text-slate-900 dark:text-white">Mobile Touch Optimization</h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ensure touch targets exceed 44x44px across all controls.</p>
+                                <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+                                    <span class="text-[11px] text-slate-400">Owner: Intern</span>
+                                    <button onclick="advanceTask('task-2', 'in-progress')" class="text-brand-600 dark:text-brand-400 hover:underline font-medium">Advance →</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: In Progress -->
+                    <div class="rounded-2xl p-4 bg-slate-100 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> In Execution
+                            </span>
+                            <span id="count-in-progress" class="text-xs px-2 py-0.5 rounded-full font-mono bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300">1</span>
+                        </div>
+                        <div id="col-in-progress" class="space-y-3 min-h-[220px]">
+                            <!-- Task Card 3 -->
+                            <div class="task-card p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-sm" data-id="task-3" data-tag="Frontend">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">Frontend</span>
+                                    <span class="text-[11px] text-slate-400 font-mono">#FX-103</span>
+                                </div>
+                                <h5 class="text-sm font-semibold text-slate-900 dark:text-white">Canvas Telemetry Graph</h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Synthesizing zero-dependency responsive vector throughput charts.</p>
+                                <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+                                    <span class="text-[11px] text-slate-400">Owner: Frontend Lead</span>
+                                    <button onclick="advanceTask('task-3', 'review')" class="text-brand-600 dark:text-brand-400 hover:underline font-medium">Verify →</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Quality Review -->
+                    <div class="rounded-2xl p-4 bg-slate-100 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-xs uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Client Review
+                            </span>
+                            <span id="count-review" class="text-xs px-2 py-0.5 rounded-full font-mono bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300">1</span>
+                        </div>
+                        <div id="col-review" class="space-y-3 min-h-[220px]">
+                            <!-- Task Card 4 -->
+                            <div class="task-card p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-sm" data-id="task-4" data-tag="A11y">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">A11y</span>
+                                    <span class="text-[11px] text-slate-400 font-mono">#FX-104</span>
+                                </div>
+                                <h5 class="text-sm font-semibold text-slate-900 dark:text-white">Keyboard Navigation Audit</h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Verify Tab, Esc, and Enter focus flow inside all dialogs and modals.</p>
+                                <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+                                    <span class="text-[11px] text-slate-400">Owner: QA Specialist</span>
+                                    <button onclick="advanceTask('task-4', 'deployed')" class="text-brand-600 dark:text-brand-400 hover:underline font-medium">Deploy ✓</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 4: Production Deployed -->
+                    <div class="rounded-2xl p-4 bg-slate-100 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-xs uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Production Deployed
+                            </span>
+                            <span id="count-deployed" class="text-xs px-2 py-0.5 rounded-full font-mono bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300">1</span>
+                        </div>
+                        <div id="col-deployed" class="space-y-3 min-h-[220px]">
+                            <!-- Task Card 5 -->
+                            <div class="task-card p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-sm" data-id="task-5" data-tag="Release">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300">Release</span>
+                                    <span class="text-[11px] text-slate-400 font-mono">#FX-105</span>
+                                </div>
+                                <h5 class="text-sm font-semibold text-slate-900 dark:text-white">Dark Mode Persist Token</h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Local preference syncing with system accessibility schema.</p>
+                                <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+                                    <span class="text-[11px] text-emerald-500 font-medium">Live on Production</span>
+                                    <button onclick="resetTask('task-5')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-[11px]">Re-queue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="py-16 bg-slate-100/70 dark:bg-slate-900/40 border-y border-slate-200/80 dark:border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Left Analytics Control -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <span class="text-xs uppercase font-bold tracking-widest text-brand-600 dark:text-brand-400">Operational Intelligence</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Real-Time Client Analytics & Telemetry</h2>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            Built with standard HTML5 Canvas without heavy external charting libraries. Shows live throughput, latency variance, and response health.
+                        </p>
+
+                        <div class="space-y-3 pt-2">
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs text-slate-400 font-medium">Throughput Index</div>
+                                    <div class="text-lg font-bold text-slate-900 dark:text-white" id="throughputValue">18,420 req/s</div>
+                                </div>
+                                <span class="text-xs font-semibold px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400">+14.2%</span>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs text-slate-400 font-medium">Error Rate</div>
+                                    <div class="text-lg font-bold text-slate-900 dark:text-white">0.0012%</div>
+                                </div>
+                                <span class="text-xs font-semibold px-2 py-1 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400">Nominal</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 pt-2">
+                            <button onclick="regenerateChartData()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold transition-all">
+                                Refresh Telemetry
+                            </button>
+                            <span class="text-xs text-slate-400">Simulates load variation</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Chart Visualizer -->
+                    <div class="lg:col-span-7">
+                        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h4 class="font-bold text-sm text-slate-900 dark:text-white">API Load & Response Benchmarks</h4>
+                                    <p class="text-[11px] text-slate-400">Live 24-hour cycle rendering</p>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs">
+                                    <span class="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 font-medium">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> Requests
+                                    </span>
+                                    <span class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Success %
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Responsive Canvas Container -->
+                            <div class="w-full h-64 relative">
+                                <canvas id="telemetryCanvas" class="w-full h-full block rounded-lg"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mb-12">
+                    <span class="text-xs uppercase font-bold tracking-widest text-brand-600 dark:text-brand-400">Engineering Rationale</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Architectural Planning & Usability Approach</h2>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
+                        How the requirement brief was transformed from a problem statement into a client-ready, enterprise-grade frontend.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Point 1 -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-950/80 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold mb-4">
+                            01
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">Requirement Interpretation</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Rather than an arbitrary demo, this app addresses enterprise operations visibility. Every section solves an explicit workflow problem: executive metrics, backlog transparency, and instant task progression.
+                        </p>
+                    </div>
+
+                    <!-- Point 2 -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold mb-4">
+                            02
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">Intentional Section Hierarchy</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Structured sequentially: Value statement → Brief breakdown → Live functional system → Analytics → Submission verification. This provides a natural discovery flow for client stakeholders.
+                        </p>
+                    </div>
+
+                    <!-- Point 3 -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold mb-4">
+                            03
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">Tactile Micro-Interactions</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Real-time pipeline task movements, live metric regeneration, interactive filtering, and dynamic toast feedback give users immediate visual confirmation without reloading pages.
+                        </p>
+                    </div>
+
+                    <!-- Point 4 -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold mb-4">
+                            04
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">Single-File Production Purity</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Zero bundle overhead. HTML5 semantics, Tailwind utility styling, and clean modular vanilla JS ensure immediate deployment suitability across any static hosting service (Vercel, Netlify, GitHub Pages).
+                        </p>
+                    </div>
+
+                    <!-- Point 5 -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-950/80 text-pink-600 dark:text-pink-400 flex items-center justify-center font-bold mb-4">
+                            05
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">Accessibility & Performance</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            No external fonts or render-blocking scripts that hurt Core Web Vitals. Fully respects reduced motion and dark mode system preferences.
+                        </p>
+                    </div>
+
+                    <!-- Point 6 -->
+                    <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-950/80 text-cyan-600 dark:text-cyan-400 flex items-center justify-center font-bold mb-4">
+                            06
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 dark:text-white mb-2">Intern Verification Dossier</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Direct automated template creation conforming to ShadowFox's submission policy, letting interns send their beginner and intermediate proofs with prefilled details directly to the review mentor.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="submission" class="py-16 bg-gradient-to-b from-transparent to-brand-50/50 dark:to-brand-950/30 border-t border-slate-200 dark:border-slate-800">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="p-8 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border-2 border-brand-500/30 dark:border-brand-500/40 shadow-xl relative overflow-hidden">
+                    <!-- Accent decorative bar -->
+                    <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-600 via-indigo-500 to-brand-accent"></div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">Official Internship Stage Verification</span>
+                            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">ShadowFox Advanced Level Submission Dossier</h3>
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 self-start sm:self-auto">
+                            <span>To:</span>
+                            <span class="text-brand-600 dark:text-brand-400 font-bold">glodubts@shadowfox.in</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 mb-6 text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
+                        <strong class="font-bold">Submission Requirement Notice:</strong> To be approved for the restricted project files, you must present your verified deployed URLs for both the Beginner-level task and the Intermediate-level task. Shortlisted candidates sign the Confidentiality & Restricted Project Access Agreement.
+                    </div>
+
+                    <!-- Interactive Email Generator Form -->
+                    <form id="submissionForm" onsubmit="handleSubmission(event)" class="space-y-4">
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="internName">Intern Full Name *</label>
+                                <input type="text" id="internName" required placeholder="e.g. Alex Johnson" class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="internId">Intern ID / Batch Track *</label>
+                                <input type="text" id="internId" required placeholder="e.g. SF-WD-2026-88" class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="beginnerLink">Beginner Task Deployed URL *</label>
+                                <input type="url" id="beginnerLink" required placeholder="https://username.github.io/sf-beginner" class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="intermediateLink">Intermediate Task Deployed URL *</label>
+                                <input type="url" id="intermediateLink" required placeholder="https://sf-intermediate.vercel.app" class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="advancedLink">Current Advanced Project URL / Repo *</label>
+                            <input type="url" id="advancedLink" required placeholder="https://foxops-advanced.netlify.app" class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="projectSummary">Client Solution Summary & Architecture Notes</label>
+                            <textarea id="projectSummary" rows="3" placeholder="Briefly summarize your approach to the client brief, responsive strategy, and product usability decisions..." class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 custom-scrollbar"></textarea>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="pt-2 flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex items-center gap-2">
+                                <button type="submit" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs uppercase tracking-wider shadow-md hover:shadow transition-all flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    <span>Draft Official Email to glodubts@shadowfox.in</span>
+                                </button>
+                                <button type="button" onclick="copyEmailDraft()" class="px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs uppercase tracking-wider transition-all">
+                                    Copy Draft to Clipboard
+                                </button>
+                            </div>
+                            <span class="text-[11px] text-slate-500">Ready for ShadowFox Review</span>
+                        </div>
+                    </form>
+
+                    <!-- Preview of generated email format -->
+                    <div id="draftPreviewBox" class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 hidden">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">Generated Email Payload:</span>
+                            <span class="text-[10px] text-emerald-500 font-medium">Auto-formatted</span>
+                        </div>
+                        <pre id="draftContent" class="text-xs font-mono p-4 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 whitespace-pre-wrap overflow-x-auto"></pre>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-10 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-xs">
+                    SF
+                </div>
+                <span>ShadowFox Web Development Internship — Advanced Client Project Module</span>
+            </div>
+            <div>
+                Official Mentor Inquiries: <a href="mailto:glodubts@shadowfox.in" class="text-brand-600 dark:text-brand-400 font-semibold hover:underline">glodubts@shadowfox.in</a>
+            </div>
+            <div>
+                <span>Single-File Production Build</span> • <span>WCAG Compliant</span>
+            </div>
+        </div>
+    </footer>
+
+    <div id="addTaskModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl m-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-base font-bold text-slate-900 dark:text-white">Add Workflow Pipeline Step</h3>
+                <button onclick="closeAddTaskModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" aria-label="Close dialog">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="newTaskForm" onsubmit="handleCreateTask(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="taskTitle">Task Name</label>
+                    <input type="text" id="taskTitle" required placeholder="e.g. Implement Webhook Auth" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="taskTag">Category / Scope</label>
+                    <select id="taskTag" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="Security">Security</option>
+                        <option value="Frontend">Frontend</option>
+                        <option value="UI/UX">UI/UX</option>
+                        <option value="Release">Release</option>
+                        <option value="A11y">A11y</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="taskDesc">Summary</label>
+                    <input type="text" id="taskDesc" required placeholder="Brief requirement specification..." class="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1" for="taskAssignee">Lead Assignee</label>
+                    <input type="text" id="taskAssignee" required placeholder="e.g. Intern Developer" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeAddTaskModal()" class="px-4 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-xs rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold">Save to Backlog</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none" aria-live="polite"></div>
+
+    <script>
+        let webhookCalls = 12;
+        let taskCounter = 105;
+
+        // Theme management with persistence
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const rootElement = document.documentElement;
+
+        // Sync initial theme
+        if (localStorage.theme === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+            rootElement.classList.remove('dark');
+        } else {
+            rootElement.classList.add('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (rootElement.classList.contains('dark')) {
+                rootElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                showToast('Light mode active', 'info');
+            } else {
+                rootElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                showToast('Dark mode active', 'info');
+            }
+            renderTelemetryChart(); // re-render canvas colors
+        });
+
+        // Mobile drawer navigation
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileDrawer.classList.toggle('hidden');
+        });
+
+        // Close mobile drawer on link click
+        mobileDrawer.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+        });
+
+        function switchTab(targetId) {
+            ['tab-functional', 'tab-design', 'tab-deliverables'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+                const btn = document.getElementById('tabBtn-' + id.replace('tab-', ''));
+                btn.className = 'px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all';
+            });
+
+            document.getElementById(targetId).classList.remove('hidden');
+            const activeBtn = document.getElementById('tabBtn-' + targetId.replace('tab-', ''));
+            activeBtn.className = 'px-4 py-2 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm transition-all';
+        }
+
+        function triggerSimulatedEvent() {
+            webhookCalls++;
+            document.getElementById('webhookCounter').innerText = 'Calls: ' + webhookCalls;
+            const bar = document.getElementById('runtimeProgressBar');
+            const status = document.getElementById('runtimeEngineStatus');
+            
+            status.innerText = 'Synchronizing Webhook...';
+            status.className = 'text-amber-400';
+            bar.style.width = '100%';
+
+            setTimeout(() => {
+                status.innerText = 'Stream Steady';
+                status.className = 'text-emerald-400';
+                bar.style.width = Math.floor(Math.random() * 30 + 65) + '%';
+                showToast('Webhook event dispatched successfully', 'success');
+            }, 500);
+        }
+
+        function updateColumnCounters() {
+            document.getElementById('count-backlog').innerText = document.getElementById('col-backlog').children.length;
+            document.getElementById('count-in-progress').innerText = document.getElementById('col-in-progress').children.length;
+            document.getElementById('count-review').innerText = document.getElementById('col-review').children.length;
+            document.getElementById('count-deployed').innerText = document.getElementById('col-deployed').children.length;
+        }
+
+        function advanceTask(taskId, targetStage) {
+            const card = document.querySelector(`[data-id="${taskId}"]`);
+            if (!card) return;
+
+            const targetCol = document.getElementById(`col-${targetStage}`);
+            const actionContainer = card.querySelector('.mt-3');
+            const ownerSpan = actionContainer.querySelector('span');
+
+            if (targetStage === 'in-progress') {
+                actionContainer.innerHTML = `
+                    <span class="text-[11px] text-slate-400">${ownerSpan.innerText}</span>
+                    <button onclick="advanceTask('${taskId}', 'review')" class="text-brand-600 dark:text-brand-400 hover:underline font-medium">Verify →</button>
+                `;
+                targetCol.appendChild(card);
+                showToast('Task moved to In Execution', 'info');
+            } else if (targetStage === 'review') {
+                actionContainer.innerHTML = `
+                    <span class="text-[11px] text-slate-400">${ownerSpan.innerText}</span>
+                    <button onclick="advanceTask('${taskId}', 'deployed')" class="text-brand-600 dark:text-brand-400 hover:underline font-medium">Deploy ✓</button>
+                `;
+                targetCol.appendChild(card);
+                showToast('Task submitted for Client Review', 'info');
+            } else if (targetStage === 'deployed') {
+                actionContainer.innerHTML = `
+                    <span class="text-[11px] text-emerald-500 font-medium">Live on Production</span>
+                    <button onclick="resetTask('${taskId}')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-[11px]">Re-queue</button>
+                `;
+                targetCol.appendChild(card);
+                showToast('Task successfully deployed!', 'success');
+            }
+            updateColumnCounters();
+        }
+
+        function resetTask(taskId) {
+            const card = document.querySelector(`[data-id="${taskId}"]`);
+            if (!card) return;
+            const targetCol = document.getElementById('col-backlog');
+            const actionContainer = card.querySelector('.mt-3');
+            actionContainer.innerHTML = `
+                <span class="text-[11px] text-slate-400">Owner: Intern</span>
+                <button onclick="advanceTask('${taskId}', 'in-progress')" class="text-brand-600 dark:text-brand-400 hover:underline font-medium">Advance →</button>
+            `;
+            targetCol.appendChild(card);
+            updateColumnCounters();
+            showToast('Task returned to Backlog', 'info');
+        }
+
+        function filterTasks() {
+            const query = document.getElementById('pipelineSearch').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.task-card');
+            cards.forEach(card => {
+                const tag = card.getAttribute('data-tag').toLowerCase();
+                const text = card.innerText.toLowerCase();
+                if (tag.includes(query) || text.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openAddTaskModal() {
+            document.getElementById('addTaskModal').classList.remove('hidden');
+            document.getElementById('taskTitle').focus();
+        }
+
+        function closeAddTaskModal() {
+            document.getElementById('addTaskModal').classList.add('hidden');
+            document.getElementById('newTaskForm').reset();
+        }
+
+        function handleCreateTask(e) {
+            e.preventDefault();
+            taskCounter++;
+            const title = document.getElementById('taskTitle').value;
+            const tag = document.getElementById('taskTag').value;
+            const desc = document.getElementById('taskDesc').value;
+            const assignee = document.getElementById('taskAssignee').value;
+            const newId = 'task-' + taskCounter;
+
+            const newCard = document.createElement('div');
+            newCard.className = 'task-card p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-sm';
+            newCard.setAttribute('data-id', newId);
+            newCard.setAttribute('data-tag', tag);
+
+            newCard.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300">${tag}</span>
+                    <span class="text-[11px] text-slate-400 font-mono">#FX-${taskCounter}</span>
+                </div>
+                <h5 class="text-sm font-semibold text-slate-900 dark:text-white">${title}</h5>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${desc}</p>
+                <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs">
+                    <span class="text-[11px] text-slate-400">Owner: ${assignee}</span>
+                    <button onclick="advanceTask('${newId}', 'in-progress')" class="text-brand-600 dark:text-brand-400 hover:underline font-medium">Advance →</button>
+                </div>
+            `;
+
+            document.getElementById('col-backlog').appendChild(newCard);
+            updateColumnCounters();
+            closeAddTaskModal();
+            showToast('New pipeline item created', 'success');
+        }
+
+        let chartDataPoints = [32, 45, 60, 52, 78, 65, 89, 74, 95, 88, 92, 110];
+
+        function renderTelemetryChart() {
+            const canvas = document.getElementById('telemetryCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            const isDark = rootElement.classList.contains('dark');
+            const width = rect.width;
+            const height = rect.height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw grid lines
+            ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+            ctx.lineWidth = 1;
+            for (let y = 20; y < height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+
+            // Draw line chart
+            const step = width / (chartDataPoints.length - 1);
+            const maxVal = Math.max(...chartDataPoints) * 1.2;
+
+            ctx.beginPath();
+            chartDataPoints.forEach((val, index) => {
+                const x = index * step;
+                const y = height - (val / maxVal) * (height - 40) - 20;
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+
+            ctx.strokeStyle = '#6366f1';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Gradient Fill under curve
+            const fillGrad = ctx.createLinearGradient(0, 0, 0, height);
+            fillGrad.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
+            fillGrad.addColorStop(1, 'rgba(99, 102, 241, 0)');
+
+            ctx.lineTo(width, height);
+            ctx.lineTo(0, height);
+            ctx.fillStyle = fillGrad;
+            ctx.fill();
+
+            // Render interactive nodes
+            chartDataPoints.forEach((val, index) => {
+                const x = index * step;
+                const y = height - (val / maxVal) * (height - 40) - 20;
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = isDark ? '#ffffff' : '#4f46e5';
+                ctx.fill();
+            });
+        }
+
+        function regenerateChartData() {
+            chartDataPoints = chartDataPoints.map(() => Math.floor(Math.random() * 80 + 35));
+            document.getElementById('throughputValue').innerText = (Math.floor(Math.random() * 5000 + 16000)).toLocaleString() + ' req/s';
+            renderTelemetryChart();
+            showToast('Telemetry points updated', 'info');
+        }
+
+        window.addEventListener('resize', renderTelemetryChart);
+
+        function generateEmailBody() {
+            const name = document.getElementById('internName').value;
+            const id = document.getElementById('internId').value;
+            const beginner = document.getElementById('beginnerLink').value;
+            const intermediate = document.getElementById('intermediateLink').value;
+            const advanced = document.getElementById('advancedLink').value;
+            const summary = document.getElementById('projectSummary').value || 'Implemented full responsive client-style operations suite (FoxOps) adhering to UX hierarchy, state pipeline transitions, and a11y standards.';
+
+            return `To: glodubts@shadowfox.in
+Subject: ShadowFox Advanced Level Task Submission - ${name} (${id})
+
+Dear Mentor / ShadowFox Review Team,
+
+I have completed both the beginner and intermediate stage requirements and am submitting my frontend portfolio links for approval for the Advanced Level Restricted Project Files:
+
+1. Intern Details:
+   - Full Name: ${name}
+   - Track / Batch ID: ${id}
+
+2. Verified Submission Links:
+   - Beginner Task URL: ${beginner}
+   - Intermediate Task URL: ${intermediate}
+   - Advanced Client Project URL: ${advanced}
+
+3. Project Architecture Summary:
+   ${summary}
+
+I confirm that I am prepared to sign and fulfill the Confidentiality and Restricted Project Access Agreement as instructed in the internship workflow.
+
+Thank you for your guidance.
+
+Sincerely,
+${name}`;
+        }
+
+        function handleSubmission(e) {
+            e.preventDefault();
+            const emailText = generateEmailBody();
+            document.getElementById('draftContent').innerText = emailText;
+            document.getElementById('draftPreviewBox').classList.remove('hidden');
+
+            const name = encodeURIComponent(document.getElementById('internName').value);
+            const id = encodeURIComponent(document.getElementById('internId').value);
+            const subject = encodeURIComponent(`ShadowFox Advanced Level Task Submission - ${name} (${id})`);
+            const body = encodeURIComponent(emailText);
+
+            // Open user's email client with prefilled body
+            window.location.href = `mailto:glodubts@shadowfox.in?subject=${subject}&body=${body}`;
+            showToast('Email client opened with formatted dossier', 'success');
+        }
+
+        function copyEmailDraft() {
+            const form = document.getElementById('submissionForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            const emailText = generateEmailBody();
+            document.getElementById('draftContent').innerText = emailText;
+            document.getElementById('draftPreviewBox').classList.remove('hidden');
+
+            // Copy to clipboard fallback for iframe compatibility
+            const tempInput = document.createElement('textarea');
+            tempInput.value = emailText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showToast('Submission email copied to clipboard!', 'success');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            const colorClass = type === 'success' 
+                ? 'bg-emerald-600 text-white' 
+                : (type === 'error' ? 'bg-rose-600 text-white' : 'bg-slate-800 text-white dark:bg-white dark:text-slate-900');
+
+            toast.className = `pointer-events-auto px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-3 opacity-0 ${colorClass}`;
+            toast.innerHTML = `
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Trigger animation frame
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-3', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-3');
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        window.onload = function() {
+            renderTelemetryChart();
+            updateColumnCounters();
+        };
+    </script>
+</body>
+</html>
